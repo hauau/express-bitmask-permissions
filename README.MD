@@ -10,7 +10,7 @@ And produces array of permission for requested route based on its section in `re
 
 ## Installation 
 ```sh
-npm install express-bitmask-permissions --save
+npm install git+ssh://git@code.42px.org:42px/express-bitmask-permissions.git --save
 ```
 
 ## Usage
