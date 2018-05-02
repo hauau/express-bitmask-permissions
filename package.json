@@ -1,0 +1,20 @@
+{
+  "name": "express-bitmask-permissions",
+  "version": "0.0.1",
+  "description": "Bitmask permissions for express",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^10.0.2",
+    "typescript": "^2.8.3"
+  },
+  "dependencies": {
+    "generic-bitmask": "0.0.7"
+  }
+}
