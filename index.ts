@@ -21,7 +21,30 @@ export interface IPBM {
   masksField?: string,
 };
 
+/** Runtime options checks */
+const validatePBMOptions = function (options: IPBM) {
+  
+  const isNonemptyObject = (obj: any) => 
+    typeof (obj) === 'object' &&
+    Object.keys(obj).length >= 1
+
+  if (!isNonemptyObject(options)) 
+    throw Error('express-bitmask-permissions requires "sections" and "descriptorBody" options')
+
+  if (!isNonemptyObject(options.sections)) 
+    throw Error('express-bitmask-permissions requires "sections" option')
+
+  if (!isNonemptyObject(options.descriptorBody))
+    throw Error('express-bitmask-permissions requires "descriptorBody" option')
+
+  if (options.masksField && (typeof (options.masksField) !== 'string')) 
+    throw Error('express-bitmask-permissions requires "masks" to be a string')
+}
+
 const PBM = function (options: IPBM) {
+
+  /** Runtime options checks */
+  validatePBMOptions(options)
 
   /** Building common defnitions beforehand */
   const sections = options.sections;
