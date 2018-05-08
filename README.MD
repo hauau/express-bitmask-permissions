@@ -1,12 +1,12 @@
 # Express-bitmask-permissions
-An express.js middleware that takes:
+Middleware that takes:
 - On middleware construction:
-  - Route sections object defining route group affinity
-  - `generic-bitmask` descriptor body defining bitmask bit permission affinity
+  - A route sections object defining a route group affinity
+  - `generic-bitmask` descriptor body defining a bitmask bit permission affinity
 - Runtime:
-  - Array of user bitmasks
+  - An array of user bitmasks
 
-And produces array of permission for requested route based on its section in `req.permissions`
+And produces an array of permission in `req.permissions` for requested route based on its predefined section 
 
 ## Installation 
 ```sh
@@ -29,7 +29,7 @@ const options = {
     '/dogs': 1
   },
   // (required) Bit permission affinity
-  // !!! Starts with 1 !!!
+  // Starts with 1
   descriptorBody: {
     'feed': 1,
     'pet': 2,
@@ -53,7 +53,6 @@ app.post('/cats/:name/pet', function(req, res, next) {
     return res
       .status(403)
       .send(`You're not allowed to pet ${req.params.name}`);
-  
 
   pet.cat(name);
 
@@ -67,10 +66,10 @@ app.post('/cats/:name/pet', function(req, res, next) {
 Middleware does following:
 
 - Takes `sections` definition from options to decide which particular bitmask to check against
-    - `'cats': 0` will check any request starting with url element '/cats' against req.user.masks[0]
+    - `'cats': 0` will check any request starting with url element '/cats' against `req.user.masks[0]`
 - Extracts bitmask array from `req.user` using default `masks` field or one provided in `masksField` option
 - Selects particular bitmask from array based on request url `section` base element match 
-    - '/cats' is a base element for a '/cats/43/kitties?fluffy=yes'
+    - e.g. '/cats' is a base element for a '/cats/43/kitties?fluffy=yes'
 - `Descriptor` is used to extract human-readable permissions from the bitmask
 
 
@@ -97,15 +96,15 @@ Bitmask array:
 [ 777, 0 ]
 ```
 
-On init:
-1. Middleware with predefined section and descriptor defnition is produced
+On init middleware with predefined section and descriptor defnition is produced
 
 On request:
 - `POST /cats/17/pet`
-- Express `req` provides array of user bitmasks extracted by other middleware 
+- Express `req` provides an array of user bitmasks extracted by other middleware 
     - `req.user.masks === [ 777, 0 ]`
-- Bitmask selected from array with the help of a `section` definition
+- Bitmask selected from an array with the help of a `section` definition
     - `req.user.masks[sections[req.baseUrl]] === 777`
-- `generic-bitmask` is used to extract array of permissions from the bitmask `777` to the array `description`
+- `generic-bitmask` is used to extract an array of permissions from the bitmask `777` to the array `description`
     - `req.permissions === [ 'feed', 'pet', 'play' ]`
+- Access control happens downstream
 
