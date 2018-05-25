@@ -60,7 +60,8 @@ const PBM = function (options: IPBM) {
     if (typeof (req.user) === 'undefined' ||
         typeof (req.user[masksField]) !== 'object'
     ) {
-      return req.permissions = [];
+      req.permissions = [];
+      return next();
     }
 
     /** 
