@@ -10,7 +10,7 @@ const PBM = function (options) {
     const descriptor = new generic_bitmask_1.Descriptor(options.descriptorBody);
     /** Setting default values */
     options.masksField = options.masksField || 'masks';
-    options.baseRegexp = options.baseRegexp || '/^(\/[^\/]+)/';
+    options.baseRegexp = options.baseRegexp || /^(\/[^\/]+)/;
     /* Returning middleware itself */
     return function (req, res, next) {
         /** If permissions can't be extracted

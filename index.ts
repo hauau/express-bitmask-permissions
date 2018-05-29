@@ -16,7 +16,7 @@ const PBM = function (options: PBMConfig) {
 
   /** Setting default values */
   options.masksField = options.masksField || 'masks';
-  options.baseRegexp = options.baseRegexp || '/^(\/[^\/]+)/';
+  options.baseRegexp = options.baseRegexp || /^(\/[^\/]+)/;
 
   /* Returning middleware itself */
   return function (req: any, res: any, next: Function) {
