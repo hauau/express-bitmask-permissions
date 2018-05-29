@@ -1,47 +1,11 @@
-import { Mask, Descriptor } from 'generic-bitmask'
+import { Mask, Descriptor } from 'generic-bitmask';
+import {
+  PBMConfig,
+  validatePBMOptions,
+  sectionFromPath
+} from './lib/utils';
 
-export interface IPBM {
-  /**
-   * `generic-bitmask` descriptor definition 
-   * 
-   * Consists of keys for unique permission name and values for bit number
-  */
-  descriptorBody: {
-    [permission: string]: number
-  },
-  /** 
-   * Sections definition obj
-   * 
-   * Consist of keys for routes and values for sections
-  */
-  sections: {
-    [route: string]: number
-  },
-  /** Field in jwt to store masks array */
-  masksField?: string,
-};
-
-/** Runtime options checks */
-const validatePBMOptions = function (options: IPBM) {
-  
-  const isNonemptyObject = (obj: any) => 
-    typeof (obj) === 'object' &&
-    Object.keys(obj).length >= 1
-
-  if (!isNonemptyObject(options)) 
-    throw Error('express-bitmask-permissions requires "sections" and "descriptorBody" options')
-
-  if (!isNonemptyObject(options.sections)) 
-    throw Error('express-bitmask-permissions requires "sections" option')
-
-  if (!isNonemptyObject(options.descriptorBody))
-    throw Error('express-bitmask-permissions requires "descriptorBody" option')
-
-  if (options.masksField && (typeof (options.masksField) !== 'string')) 
-    throw Error('express-bitmask-permissions requires "masks" to be a string')
-}
-
-const PBM = function (options: IPBM) {
+const PBM = function (options: PBMConfig) {
 
   /** Runtime options checks */
   validatePBMOptions(options)
@@ -72,12 +36,14 @@ const PBM = function (options: IPBM) {
      * and will match a definition `{ '/things': 5 }`
      * and resulting section will be `5`
      */
-    const section = sections[req.baseUrl];
+
+    const path = sectionFromPath(req.path, options)
+    const section = sections[path];
 
     /** Section is *required* to perform access control */
     if (typeof(section) === 'undefined') {
       return next(
-        new Error(`Route ${req.originalUrl} isn't mapped to any section`)
+        new Error(`Route ${path} isn't mapped to any section`)
       );  
     }
     
