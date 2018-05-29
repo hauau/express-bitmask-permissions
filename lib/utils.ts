@@ -15,15 +15,17 @@ interface PBMConfig {
   sections: {
     [route: string]: number
   },
+  /** 
+  * RegExp string to get base url
+  * First group would be used to match against section definition
+  * 
+  * Defaults to `/^(\/[^\/]+)/`
+  */
+  baseRegexp?: string | RegExp
   /** Field in jwt to store masks array */
   masksField?: string,
   /** url prefix to ignore */
   urlPrefix?: string,
-  /** 
-   * RegExp string to get base url
-   * First group would be used to match against section definition
-   */
-  baseRegexp: '/^(\/[^\/]+)/'
 };
 
 /** Runtime options checks */
@@ -57,7 +59,7 @@ const dropPrefix = function (path: string, prefix?: string) {
 
 /** Extract section matching string from url path */
 const sectionFromPath = function (path: string, options: PBMConfig) {
-  const match = dropPrefix(path, options.urlPrefix).match(options.baseRegexp)
+  const match = dropPrefix(path, options.urlPrefix).match(options.baseRegexp as string)
 
   return match ? match[0] : ''
 }

@@ -13,7 +13,10 @@ const PBM = function (options: PBMConfig) {
   /** Building common defnitions beforehand */
   const sections = options.sections;
   const descriptor = new Descriptor(options.descriptorBody);
-  const masksField = options.masksField || 'masks';
+
+  /** Setting default values */
+  options.masksField = options.masksField || 'masks';
+  options.baseRegexp = options.baseRegexp || '/^(\/[^\/]+)/';
 
   /* Returning middleware itself */
   return function (req: any, res: any, next: Function) {
@@ -22,7 +25,7 @@ const PBM = function (options: PBMConfig) {
      * return no permissions for user
      */
     if (typeof (req.user) === 'undefined' ||
-        typeof (req.user[masksField]) !== 'object'
+        typeof (req.user[options.masksField as string]) !== 'object'
     ) {
       req.permissions = [];
       return next();
@@ -42,9 +45,8 @@ const PBM = function (options: PBMConfig) {
 
     /** Section is *required* to perform access control */
     if (typeof(section) === 'undefined') {
-      return next(
-        new Error(`Route ${path} isn't mapped to any section`)
-      );  
+      const err = new Error(`Route ${path} isn't mapped to any section`);
+      return next(err);  
     }
     
     const mask = req.user.masks[section]
