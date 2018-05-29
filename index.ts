@@ -52,7 +52,7 @@ const PBM = function (options: PBMConfig) {
     const mask = req.user.masks[section]
 
     req.permissions = mask
-      ? descriptor.extract(mask)
+      ? descriptor.extract(new Mask(mask))
       : [];
 
     next();
