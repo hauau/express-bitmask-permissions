@@ -8,14 +8,16 @@ const PBM = function (options) {
     /** Building common defnitions beforehand */
     const sections = options.sections;
     const descriptor = new generic_bitmask_1.Descriptor(options.descriptorBody);
-    const masksField = options.masksField || 'masks';
+    /** Setting default values */
+    options.masksField = options.masksField || 'masks';
+    options.baseRegexp = options.baseRegexp || '/^(\/[^\/]+)/';
     /* Returning middleware itself */
     return function (req, res, next) {
         /** If permissions can't be extracted
          * return no permissions for user
          */
         if (typeof (req.user) === 'undefined' ||
-            typeof (req.user[masksField]) !== 'object') {
+            typeof (req.user[options.masksField]) !== 'object') {
             req.permissions = [];
             return next();
         }
@@ -31,7 +33,8 @@ const PBM = function (options) {
         const section = sections[path];
         /** Section is *required* to perform access control */
         if (typeof (section) === 'undefined') {
-            return next(new Error(`Route ${path} isn't mapped to any section`));
+            const err = new Error(`Route ${path} isn't mapped to any section`);
+            return next(err);
         }
         const mask = req.user.masks[section];
         req.permissions = mask

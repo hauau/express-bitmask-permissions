@@ -15,15 +15,17 @@ interface PBMConfig {
     sections: {
         [route: string]: number;
     };
+    /**
+    * RegExp string to get base url
+    * First group would be used to match against section definition
+    *
+    * Defaults to `/^(\/[^\/]+)/`
+    */
+    baseRegexp?: string | RegExp;
     /** Field in jwt to store masks array */
     masksField?: string;
     /** url prefix to ignore */
     urlPrefix?: string;
-    /**
-     * RegExp string to get base url
-     * First group would be used to match against section definition
-     */
-    baseRegexp: '/^(\/[^\/]+)/';
 }
 /** Runtime options checks */
 declare const validatePBMOptions: (options: PBMConfig) => void;
