@@ -11,11 +11,23 @@
   },
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:hauau/express-bitmask-permissions.git"
+  },
   "devDependencies": {
     "@types/node": "^10.0.2",
     "typescript": "^2.8.3"
   },
   "dependencies": {
     "generic-bitmask": "0.0.7"
-  }
+  },
+  "files": [
+    "index.ts",
+    "package.json",
+    "tsconfig.json",
+    "/dist",
+    "/lib",
+    "/types"
+  ]
 }
