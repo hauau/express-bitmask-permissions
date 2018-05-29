@@ -38,7 +38,7 @@ const PBM = function (options) {
         }
         const mask = req.user.masks[section];
         req.permissions = mask
-            ? descriptor.extract(mask)
+            ? descriptor.extract(new generic_bitmask_1.Mask(mask))
             : [];
         next();
     };
